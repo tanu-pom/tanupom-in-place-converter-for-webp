@@ -1,0 +1,222 @@
+# Japanese translation for Simply WebP.
+# Copyright (C) 2026 tanupom
+# This file is distributed under the GPL-2.0-or-later license.
+msgid ""
+msgstr ""
+"Project-Id-Version: Simply WebP 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/simply-webp\n"
+"POT-Creation-Date: 2026-06-30T13:44:16+00:00\n"
+"PO-Revision-Date: 2026-05-31 00:00+0000\n"
+"Last-Translator: tanupom\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: simply-webp\n"
+
+#. Plugin Name of the plugin
+#: simply-webp.php includes/admin.php:243 includes/admin.php:244
+#: includes/admin.php:307
+msgid "Simply WebP"
+msgstr "Simply WebP"
+
+#. Plugin URI of the plugin
+#: simply-webp.php
+msgid "https://github.com/tanu-pom/simply-webp"
+msgstr ""
+
+#. Description of the plugin
+#: simply-webp.php
+msgid ""
+"Convert new uploads and your existing media library to WebP in place, and "
+"update the references in your content. A simple, single-format approach to "
+"lighter images."
+msgstr ""
+
+#. Author of the plugin
+#: simply-webp.php
+msgid "tanupom"
+msgstr ""
+
+#. Author URI of the plugin
+#: simply-webp.php
+msgid "https://github.com/tanu-pom"
+msgstr ""
+
+#: includes/admin.php:63
+msgid "Conversion settings"
+msgstr "変換設定"
+
+#: includes/admin.php:70
+msgid "WebP quality (JPEG)"
+msgstr "WebP 品質（JPEG）"
+
+#: includes/admin.php:79
+msgid "PNG"
+msgstr "PNG"
+
+#: includes/admin.php:87
+msgid "Metadata"
+msgstr "メタデータ"
+
+#: includes/admin.php:95
+msgid "Reference replacement"
+msgstr "参照差し替え"
+
+#: includes/admin.php:102
+msgid "Additional post types"
+msgstr "追加する投稿タイプ"
+
+#: includes/admin.php:139
+msgid ""
+"Reference replacement rewrites old image URLs in post_content to the new ."
+"webp URLs after conversion. By default it scans posts, pages, attachments, "
+"and revisions. Use the field below to add custom post types that also "
+"contain image URLs."
+msgstr ""
+"参照差し替えは、変換後に本文中の旧画像 URL を新しい .webp URL に書き換えま"
+"す。既定では投稿・固定ページ・添付ファイル・リビジョンが対象です。画像 URL を"
+"含むカスタム投稿タイプがあれば、下のフィールドで追加してください。"
+
+#: includes/admin.php:176
+msgid "No public custom post types are registered on this site."
+msgstr "このサイトには公開カスタム投稿タイプが登録されていません。"
+
+#: includes/admin.php:190
+msgid ""
+"Each checked post type is added to the URL replacement scan in addition to "
+"the defaults."
+msgstr ""
+"チェックした投稿タイプは、既定の対象に加えて URL 差し替えのスキャン対象になり"
+"ます。"
+
+#: includes/admin.php:202
+msgid ""
+"1–100. Higher means better quality but larger files. Default 80. Applies to "
+"lossy (JPEG) conversion."
+msgstr ""
+"1〜100。大きいほど高品質ですがファイルも大きくなります。既定値は 80。ロッシー"
+"（JPEG）変換に適用されます。"
+
+#: includes/admin.php:216
+msgid ""
+"Encode PNG as lossless WebP (keeps transparency, avoids fringing on logos "
+"and text)"
+msgstr ""
+"PNG をロスレス WebP で変換する（透過を保持し、ロゴや文字のにじみを防ぎます）"
+
+#: includes/admin.php:231
+msgid ""
+"Strip image metadata (EXIF) — smaller files and no leaking of GPS location "
+"data"
+msgstr ""
+"画像のメタデータ（EXIF）を除去する — ファイルが軽くなり、GPS 位置情報の漏洩も"
+"防げます"
+
+#: includes/admin.php:278
+msgid "Scanning…"
+msgstr "棚卸し中…"
+
+#: includes/admin.php:279
+msgid "Converting…"
+msgstr "変換中…"
+
+#: includes/admin.php:280
+msgid "Replacing references…"
+msgstr "参照差し替え中…"
+
+#: includes/admin.php:281
+msgid "Done"
+msgstr "完了"
+
+#: includes/admin.php:282
+msgid "An error occurred."
+msgstr "エラーが発生しました"
+
+#. translators: 1: number converted, 2: total, 3: number remaining, 4: number of URL pairs accumulated.
+#: includes/admin.php:284
+#, php-format
+msgid "Converting %1$d / %2$d (remaining %3$d, map %4$d)"
+msgstr "変換中 %1$d / %2$d（残り %3$d / マップ %4$d 件）"
+
+#. translators: 1: number converted, 2: total, 3: number of old-to-new URL pairs accumulated.
+#: includes/admin.php:286
+#, php-format
+msgid "Done — %1$d / %2$d (%3$d old-to-new URL pairs accumulated)"
+msgstr "完了 — %1$d / %2$d（旧→新 URL マップ %3$d 件を蓄積）"
+
+#: includes/admin.php:311
+msgid ""
+"This server’s Imagick build cannot output WebP, so conversion is unavailable."
+msgstr "このサーバの Imagick は WebP 出力に対応していません。変換できません。"
+
+#: includes/admin.php:318
+msgid "Settings saved."
+msgstr "設定を保存しました。"
+
+#: includes/admin.php:327
+msgid "Save settings"
+msgstr "設定を保存"
+
+#: includes/admin.php:333
+msgid "1. Inventory (scan for reference locations)"
+msgstr "1. 棚卸し（参照箇所の調査）"
+
+#: includes/admin.php:334
+msgid ""
+"Scans where image URLs are used across post content, meta, and options. "
+"Nothing is modified."
+msgstr ""
+"画像 URL が本文・メタ・オプションのどこに使われているかを調べます（書き換えは"
+"行いません）。"
+
+#: includes/admin.php:336
+msgid "Run inventory"
+msgstr "棚卸しを実行"
+
+#: includes/admin.php:340
+msgid "2. Bulk WebP conversion"
+msgstr "2. 一括 WebP 変換"
+
+#. translators: %d: number of unconverted attachments.
+#: includes/admin.php:345
+#, php-format
+msgid "Unconverted images (JPEG / PNG): %d"
+msgstr "未変換の画像（JPEG / PNG）: %d 件"
+
+#: includes/admin.php:350
+msgid ""
+"Replaces originals with WebP in place (irreversible). Back up your media "
+"before running. Reference replacement is performed separately."
+msgstr ""
+"原本を WebP に置き換えます（不可逆）。実行前にメディアのバックアップを取って"
+"ください。参照差し替えは別途行います。"
+
+#: includes/admin.php:352
+msgid "Start bulk conversion"
+msgstr "一括変換を開始"
+
+#: includes/admin.php:360
+msgid "3. Replace references"
+msgstr "3. 参照差し替え"
+
+#: includes/admin.php:361
+msgid ""
+"Applies the accumulated “old URL → new URL” pairs to post content and "
+"options. Run this after conversion."
+msgstr ""
+"変換で蓄積した「旧 URL → 新 URL」を本文・オプションに反映します（変換後に実"
+"行）。"
+
+#. translators: %d: number of accumulated URL pairs.
+#: includes/admin.php:368
+#, php-format
+msgid "Accumulated URL pairs: %d"
+msgstr "蓄積済みの URL ペア: %d 件"
+
+#: includes/admin.php:374
+msgid "Run reference replacement"
+msgstr "参照差し替えを実行"
+

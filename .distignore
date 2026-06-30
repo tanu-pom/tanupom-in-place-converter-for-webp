@@ -1,0 +1,26 @@
+# Files and directories to exclude from the distribution zip
+# (used by `wp dist-archive` and similar tooling).
+
+/.git
+/.github
+/.gitignore
+/.gitattributes
+/.distignore
+/.wordpress-org
+/.editorconfig
+/node_modules
+/vendor
+/composer.json
+/composer.lock
+/package.json
+/package-lock.json
+/phpcs.xml
+/phpcs.xml.dist
+/phpunit.xml
+/phpunit.xml.dist
+/README.md
+/CHANGELOG.md
+/CONTRIBUTING.md
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,13 @@
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Build / dev
+node_modules/
+vendor/
+composer.lock
+
+# Logs
+*.log

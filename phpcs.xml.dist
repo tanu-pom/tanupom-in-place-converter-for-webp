@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<ruleset name="Simply WebP">
+	<description>Coding standard for the Simply WebP plugin (WordPress + Japanese inline comments).</description>
+
+	<!-- 対象: このプラグインの PHP のみ。 -->
+	<file>.</file>
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg value="ps"/>
+
+	<!-- ベースは WordPress 規約。 -->
+	<rule ref="WordPress"/>
+
+	<!--
+		コードコメントは日本語で維持する方針（README / i18n 文字列は英語化済み）。
+		以下は英語散文向けの体裁チェックで、日本語コメントには意味をなさず
+		WP.org Plugin Check のブロッカーでもないため除外する。
+	-->
+	<rule ref="Squiz.Commenting.InlineComment.InvalidEndChar">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Squiz.Commenting.FunctionComment.ParamCommentFullStop">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Generic.Commenting.DocComment.LongNotCapital">
+		<severity>0</severity>
+	</rule>
+	<!-- 日本語コメントは小文字のコード識別子（post_content / attachment 等）で
+	     始まることがあり、英語散文の「大文字始まり」チェックは不適合。LongNotCapital と
+	     同方針で除外する。 -->
+	<rule ref="Generic.Commenting.DocComment.ShortNotCapital">
+		<severity>0</severity>
+	</rule>
+
+	<!-- i18n: テキストドメインを宣言（誤検知の抑止）。 -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="simply-webp"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- グローバル接頭辞を宣言（PrefixAllGlobals の誤検知を抑止）。 -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="simply_webp"/>
+				<element value="SIMPLY_WEBP"/>
+				<element value="SimplyWebP"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!--
+		本プラグインは「既存メディアライブラリの一括 WebP 化」が目的の DB 移行/スキャン
+		ツールであり、attachment の件数集計・本文/option 内の画像 URL 横断スキャン・一括
+		UPDATE といった直接 DB アクセスが機能の核。高レベル API では一括処理が非効率で、
+		一度きりの移行クエリにオブジェクトキャッシュを噛ませる意味もない（むしろ整合の害）。
+		よって DirectDatabaseQuery（DirectQuery / NoCaching）はプラグイン全体で除外する。
+		※ SQL は全て $wpdb->prepare() を通し、可変個プレースホルダの誤検知のみ該当行で
+		   理由付き phpcs:ignore（PreparedSQL ルール本体は生かす）。
+	-->
+	<rule ref="WordPress.DB.DirectDatabaseQuery">
+		<severity>0</severity>
+	</rule>
+
+	<config name="minimum_supported_wp_version" value="5.5"/>
+</ruleset>
