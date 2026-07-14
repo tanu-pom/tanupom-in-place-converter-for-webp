@@ -11,3 +11,6 @@ composer.lock
 
 # Logs
 *.log
+
+# Build artifacts
+dist/
