@@ -11,7 +11,7 @@
  * replacement — is left to the caller. The pipeline itself is:
  * Imagick read -> autoOrient -> WebP write -> optional EXIF strip.
  *
- * @package Simply_WebP
+ * @package Tanupom_In_Place_Converter
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *                    avoids fringing on logos and text).
  * - strip_metadata : Strip EXIF (smaller files, no GPS location leak).
  */
-const SIMPLY_WEBP_DEFAULTS = array(
+const TANUPOM_IPC_DEFAULTS = array(
 	'quality'        => 80,
 	'png_lossless'   => true,
 	'strip_metadata' => true,
@@ -41,25 +41,25 @@ const SIMPLY_WEBP_DEFAULTS = array(
  * Option name used to persist the settings. Shared by the settings page and
  * the uninstaller.
  */
-const SIMPLY_WEBP_SETTINGS_OPTION = 'simply_webp_settings';
+const TANUPOM_IPC_SETTINGS_OPTION = 'tanupom_ipc_settings';
 
 /**
  * Return the active conversion settings (saved option merged with defaults).
  *
  * Reflects values saved on the settings page in includes/admin.php. Missing
  * keys (settings page never saved, or front-end contexts where the admin UI
- * is not loaded) fall back to SIMPLY_WEBP_DEFAULTS so the conversion core
+ * is not loaded) fall back to TANUPOM_IPC_DEFAULTS so the conversion core
  * always receives a complete settings array.
  *
  * @return array{quality:int,png_lossless:bool,strip_metadata:bool} Conversion settings.
  */
-function simply_webp_get_settings() {
-	$saved = get_option( SIMPLY_WEBP_SETTINGS_OPTION, array() );
+function tanupom_ipc_get_settings() {
+	$saved = get_option( TANUPOM_IPC_SETTINGS_OPTION, array() );
 	if ( ! is_array( $saved ) ) {
 		$saved = array();
 	}
 
-	$config = array_merge( SIMPLY_WEBP_DEFAULTS, $saved );
+	$config = array_merge( TANUPOM_IPC_DEFAULTS, $saved );
 
 	// Normalize types: the option can hold arbitrary values, so coerce them before the conversion core sees them.
 	$config['quality']        = min( 100, max( 1, (int) $config['quality'] ) );
@@ -76,7 +76,7 @@ function simply_webp_get_settings() {
  * bulk pass; supporting them would require extra delegate-availability
  * handling and is not needed for the typical media library.
  */
-const SIMPLY_WEBP_TARGET_MIMES = array(
+const TANUPOM_IPC_TARGET_MIMES = array(
 	'image/jpeg',
 	'image/png',
 );
@@ -93,7 +93,7 @@ const SIMPLY_WEBP_TARGET_MIMES = array(
  *
  * @return bool True when WebP output is available.
  */
-function simply_webp_server_supported() {
+function tanupom_ipc_server_supported() {
 	static $supported = null;
 
 	if ( null !== $supported ) {
@@ -135,13 +135,13 @@ function simply_webp_server_supported() {
  * @param string $mime Source MIME (PNG triggers lossless encoding; others use the configured quality).
  * @return bool True when conversion succeeded and $dest exists.
  */
-function simply_webp_convert_file( $src, $dest, $mime ) {
+function tanupom_ipc_convert_file( $src, $dest, $mime ) {
 
 	if ( empty( $src ) || empty( $dest ) || ! file_exists( $src ) ) {
 		return false;
 	}
 
-	$config       = simply_webp_get_settings();
+	$config       = tanupom_ipc_get_settings();
 	$use_lossless = ( 'image/png' === $mime && $config['png_lossless'] );
 
 	// A single large image can exceed the default execution time. The bulk path drives

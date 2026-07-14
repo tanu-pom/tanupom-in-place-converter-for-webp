@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Simply WebP">
-	<description>Coding standard for the Simply WebP plugin (WordPress + Japanese inline comments).</description>
+<ruleset name="Tanupom In-Place Converter for WebP">
+	<description>Coding standard for the Tanupom In-Place Converter for WebP plugin (WordPress + Japanese inline comments).</description>
 
 	<!-- 対象: このプラグインの PHP のみ。 -->
 	<file>.</file>
@@ -36,7 +36,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="simply-webp"/>
+				<element value="tanupom-in-place-converter-for-webp"/>
 			</property>
 		</properties>
 	</rule>
@@ -45,9 +45,9 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="simply_webp"/>
-				<element value="SIMPLY_WEBP"/>
-				<element value="SimplyWebP"/>
+				<element value="tanupom_ipc"/>
+				<element value="TANUPOM_IPC"/>
+				<element value="TanupomIpc"/>
 			</property>
 		</properties>
 	</rule>

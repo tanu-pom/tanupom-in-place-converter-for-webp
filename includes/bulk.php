@@ -12,7 +12,7 @@
  * resumable: a failed attachment leaves the original untouched and the next
  * batch picks up where the previous one stopped.
  *
- * @package Simply_WebP
+ * @package Tanupom_In_Place_Converter
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -29,10 +29,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return int Number of attachments remaining.
  */
-function simply_webp_count_pending() {
+function tanupom_ipc_count_pending() {
 	global $wpdb;
 
-	$mimes        = SIMPLY_WEBP_TARGET_MIMES;
+	$mimes        = TANUPOM_IPC_TARGET_MIMES;
 	$placeholders = implode( ',', array_fill( 0, count( $mimes ), '%s' ) );
 
 	// $placeholders is a self-built "%s,%s,..." sequence with no user input; the actual
@@ -56,8 +56,8 @@ function simply_webp_count_pending() {
  *
  * @return int Current target-MIME count.
  */
-function simply_webp_count_target_total() {
-	return simply_webp_count_pending();
+function tanupom_ipc_count_target_total() {
+	return tanupom_ipc_count_pending();
 }
 
 /**
@@ -66,11 +66,11 @@ function simply_webp_count_target_total() {
  * @param int $limit Number of IDs to fetch.
  * @return int[] Attachment IDs.
  */
-function simply_webp_get_pending_ids( $limit ) {
+function tanupom_ipc_get_pending_ids( $limit ) {
 	global $wpdb;
 
 	$limit        = max( 1, (int) $limit );
-	$mimes        = SIMPLY_WEBP_TARGET_MIMES;
+	$mimes        = TANUPOM_IPC_TARGET_MIMES;
 	$placeholders = implode( ',', array_fill( 0, count( $mimes ), '%s' ) );
 
 	$args   = $mimes;
@@ -108,7 +108,7 @@ function simply_webp_get_pending_ids( $limit ) {
  * @param array|bool $meta Return value of wp_get_attachment_metadata (sizes / original_image).
  * @return array Size name => URL path ('full' = original, '__original' = pre-scaled source, plus each size).
  */
-function simply_webp_collect_urls( $file, $meta ) {
+function tanupom_ipc_collect_urls( $file, $meta ) {
 	$upload  = wp_upload_dir();
 	$basedir = $upload['basedir'];
 	$baseurl = $upload['baseurl'];
@@ -150,11 +150,11 @@ function simply_webp_collect_urls( $file, $meta ) {
  * mapping falls back to the new full-size URL. Values are paths and therefore
  * domain-agnostic.
  *
- * @param array $old_urls Old-side output of simply_webp_collect_urls.
- * @param array $new_urls New-side output of simply_webp_collect_urls.
+ * @param array $old_urls Old-side output of tanupom_ipc_collect_urls.
+ * @param array $new_urls New-side output of tanupom_ipc_collect_urls.
  * @return array<string,string> Old URL path => new URL path.
  */
-function simply_webp_build_url_pairs( $old_urls, $new_urls ) {
+function tanupom_ipc_build_url_pairs( $old_urls, $new_urls ) {
 	$pairs    = array();
 	$new_full = isset( $new_urls['full'] ) ? $new_urls['full'] : '';
 
@@ -180,7 +180,7 @@ function simply_webp_build_url_pairs( $old_urls, $new_urls ) {
  * @param array|bool $old_meta Old attachment metadata (sizes / original_image).
  * @return void
  */
-function simply_webp_delete_old_files( $old_file, $old_meta ) {
+function tanupom_ipc_delete_old_files( $old_file, $old_meta ) {
 	$dir = trailingslashit( dirname( $old_file ) );
 
 	if ( file_exists( $old_file ) ) {
@@ -227,7 +227,7 @@ function simply_webp_delete_old_files( $old_file, $old_meta ) {
  *     @type string $message Human-readable result message for logs / UI.
  * }
  */
-function simply_webp_convert_attachment( $id ) {
+function tanupom_ipc_convert_attachment( $id ) {
 	$id   = (int) $id;
 	$post = get_post( $id );
 
@@ -253,7 +253,7 @@ function simply_webp_convert_attachment( $id ) {
 	}
 
 	// Do not touch unsupported MIME types.
-	if ( ! in_array( $mime, SIMPLY_WEBP_TARGET_MIMES, true ) ) {
+	if ( ! in_array( $mime, TANUPOM_IPC_TARGET_MIMES, true ) ) {
 		return array(
 			'success' => true,
 			'skipped' => true,
@@ -262,7 +262,7 @@ function simply_webp_convert_attachment( $id ) {
 		);
 	}
 
-	if ( ! simply_webp_server_supported() ) {
+	if ( ! tanupom_ipc_server_supported() ) {
 		return array(
 			'success' => false,
 			'skipped' => false,
@@ -283,7 +283,7 @@ function simply_webp_convert_attachment( $id ) {
 
 	// Capture the old meta and old URL paths before conversion (they change after update_attached_file).
 	$old_meta = wp_get_attachment_metadata( $id );
-	$old_urls = simply_webp_collect_urls( $old_file, $old_meta );
+	$old_urls = tanupom_ipc_collect_urls( $old_file, $old_meta );
 
 	// Destination: the canonical .webp filename in the same directory (in-place conversion).
 	//
@@ -303,7 +303,7 @@ function simply_webp_convert_attachment( $id ) {
 	}
 
 	// Convert (on failure the partial destination is cleaned up and the original is preserved).
-	if ( ! simply_webp_convert_file( $old_file, $new_file, $mime ) ) {
+	if ( ! tanupom_ipc_convert_file( $old_file, $new_file, $mime ) ) {
 		return array(
 			'success' => false,
 			'skipped' => false,
@@ -340,11 +340,11 @@ function simply_webp_convert_attachment( $id ) {
 	clean_post_cache( $id );
 
 	// Delete the old files (original + subsizes + pre-scaled source).
-	simply_webp_delete_old_files( $old_file, $old_meta );
+	tanupom_ipc_delete_old_files( $old_file, $old_meta );
 
 	// Build the old URL => new URL pairs.
-	$new_urls = simply_webp_collect_urls( $new_file, $new_meta );
-	$pairs    = simply_webp_build_url_pairs( $old_urls, $new_urls );
+	$new_urls = tanupom_ipc_collect_urls( $new_file, $new_meta );
+	$pairs    = tanupom_ipc_build_url_pairs( $old_urls, $new_urls );
 
 	return array(
 		'success' => true,

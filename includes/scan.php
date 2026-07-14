@@ -11,7 +11,7 @@
  *
  * Read-only: COUNT / SELECT only, never UPDATE.
  *
- * @package Simply_WebP
+ * @package Tanupom_In_Place_Converter
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return string Upload path fragment with a trailing slash.
  */
-function simply_webp_uploads_path_needle() {
+function tanupom_ipc_uploads_path_needle() {
 	$upload = wp_upload_dir();
 	$path   = wp_parse_url( $upload['baseurl'], PHP_URL_PATH );
 	if ( empty( $path ) ) {
@@ -45,10 +45,10 @@ function simply_webp_uploads_path_needle() {
  *
  * @return array Inventory result with the keys documented below.
  */
-function simply_webp_scan_url_usage() {
+function tanupom_ipc_scan_url_usage() {
 	global $wpdb;
 
-	$needle = simply_webp_uploads_path_needle();
+	$needle = tanupom_ipc_uploads_path_needle();
 	$like   = '%' . $wpdb->esc_like( $needle ) . '%';
 	$jpg    = '%.jpg%';
 	$jpeg   = '%.jpeg%';

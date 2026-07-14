@@ -17,7 +17,7 @@
  * brittle s:N:"..." length recounting that raw string replacement would
  * require.
  *
- * @package Simply_WebP
+ * @package Tanupom_In_Place_Converter
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param array $pairs Old URL => new URL map for strtr().
  * @return mixed Rewritten value.
  */
-function simply_webp_replace_recursive( $data, $pairs ) {
+function tanupom_ipc_replace_recursive( $data, $pairs ) {
 	if ( is_string( $data ) ) {
 		return '' === $data ? $data : strtr( $data, $pairs );
 	}
@@ -44,7 +44,7 @@ function simply_webp_replace_recursive( $data, $pairs ) {
 	if ( is_array( $data ) ) {
 		$out = array();
 		foreach ( $data as $key => $value ) {
-			$out[ $key ] = simply_webp_replace_recursive( $value, $pairs );
+			$out[ $key ] = tanupom_ipc_replace_recursive( $value, $pairs );
 		}
 		return $out;
 	}
@@ -52,7 +52,7 @@ function simply_webp_replace_recursive( $data, $pairs ) {
 	if ( is_object( $data ) ) {
 		$out = clone $data;
 		foreach ( get_object_vars( $out ) as $key => $value ) {
-			$out->$key = simply_webp_replace_recursive( $value, $pairs );
+			$out->$key = tanupom_ipc_replace_recursive( $value, $pairs );
 		}
 		return $out;
 	}
@@ -64,15 +64,15 @@ function simply_webp_replace_recursive( $data, $pairs ) {
  * Return the list of post types whose post_content is scanned for URL replacement.
  *
  * Defaults to page / post / attachment / revision. Site owners can extend the
- * list from the Settings page (option simply_webp_extra_post_types), and
- * developers can override the final list via the simply_webp_replace_post_types
+ * list from the Settings page (option tanupom_ipc_extra_post_types), and
+ * developers can override the final list via the tanupom_ipc_replace_post_types
  * filter.
  *
  * @return string[] Sanitized post type slugs.
  */
-function simply_webp_get_replace_post_types() {
+function tanupom_ipc_get_replace_post_types() {
 	$defaults = array( 'page', 'post', 'attachment', 'revision' );
-	$extras   = (array) get_option( 'simply_webp_extra_post_types', array() );
+	$extras   = (array) get_option( 'tanupom_ipc_extra_post_types', array() );
 	$extras   = array_filter( array_map( 'sanitize_key', $extras ) );
 
 	$types = array_values( array_unique( array_merge( $defaults, $extras ) ) );
@@ -82,16 +82,16 @@ function simply_webp_get_replace_post_types() {
 	 *
 	 * @param string[] $types Post type slugs.
 	 */
-	return (array) apply_filters( 'simply_webp_replace_post_types', $types );
+	return (array) apply_filters( 'tanupom_ipc_replace_post_types', $types );
 }
 
 /**
  * Replace old image URLs with new ones in post_content.
  *
  * The set of post types scanned is returned by
- * simply_webp_get_replace_post_types() (default page / post / attachment /
+ * tanupom_ipc_get_replace_post_types() (default page / post / attachment /
  * revision, extendable from the settings page or the
- * simply_webp_replace_post_types filter).
+ * tanupom_ipc_replace_post_types filter).
  *
  * @param array $pairs Old URL => new URL.
  * @return array {
@@ -99,7 +99,7 @@ function simply_webp_get_replace_post_types() {
  *     @type int $changed    Number actually updated.
  * }
  */
-function simply_webp_replace_in_posts( $pairs ) {
+function tanupom_ipc_replace_in_posts( $pairs ) {
 	global $wpdb;
 
 	if ( empty( $pairs ) ) {
@@ -109,10 +109,10 @@ function simply_webp_replace_in_posts( $pairs ) {
 		);
 	}
 
-	$needle = simply_webp_uploads_path_needle();
+	$needle = tanupom_ipc_uploads_path_needle();
 	$like   = '%' . $wpdb->esc_like( $needle ) . '%';
 
-	$types        = simply_webp_get_replace_post_types();
+	$types        = tanupom_ipc_get_replace_post_types();
 	$placeholders = implode( ',', array_fill( 0, count( $types ), '%s' ) );
 	$args         = array_merge( array( $like ), $types );
 
@@ -166,7 +166,7 @@ function simply_webp_replace_in_posts( $pairs ) {
  *     @type int $changed    Number actually updated.
  * }
  */
-function simply_webp_replace_in_options( $pairs ) {
+function tanupom_ipc_replace_in_options( $pairs ) {
 	global $wpdb;
 
 	if ( empty( $pairs ) ) {
@@ -176,7 +176,7 @@ function simply_webp_replace_in_options( $pairs ) {
 		);
 	}
 
-	$needle = simply_webp_uploads_path_needle();
+	$needle = tanupom_ipc_uploads_path_needle();
 	$like   = '%' . $wpdb->esc_like( $needle ) . '%';
 
 	// Select option_name for any option whose value contains an old URL.
@@ -197,7 +197,7 @@ function simply_webp_replace_in_options( $pairs ) {
 		if ( false === $value ) {
 			continue;
 		}
-		$new = simply_webp_replace_recursive( $value, $pairs );
+		$new = tanupom_ipc_replace_recursive( $value, $pairs );
 		// Compare serialized forms so cloned objects are also detected as changed when their contents differ.
 		if ( maybe_serialize( $new ) !== maybe_serialize( $value ) ) {
 			update_option( $name, $new );
@@ -216,12 +216,12 @@ function simply_webp_replace_in_options( $pairs ) {
  *
  * @return array {
  *     @type int   $mapCount Number of pairs in the map.
- *     @type array $posts    Result of simply_webp_replace_in_posts.
- *     @type array $options  Result of simply_webp_replace_in_options.
+ *     @type array $posts    Result of tanupom_ipc_replace_in_posts.
+ *     @type array $options  Result of tanupom_ipc_replace_in_options.
  * }
  */
-function simply_webp_run_replace() {
-	$map = get_option( SIMPLY_WEBP_URL_MAP_OPTION, array() );
+function tanupom_ipc_run_replace() {
+	$map = get_option( TANUPOM_IPC_URL_MAP_OPTION, array() );
 	if ( ! is_array( $map ) || empty( $map ) ) {
 		return array(
 			'mapCount' => 0,
@@ -238,7 +238,7 @@ function simply_webp_run_replace() {
 
 	return array(
 		'mapCount' => count( $map ),
-		'posts'    => simply_webp_replace_in_posts( $map ),
-		'options'  => simply_webp_replace_in_options( $map ),
+		'posts'    => tanupom_ipc_replace_in_posts( $map ),
+		'options'  => tanupom_ipc_replace_in_options( $map ),
 	);
 }

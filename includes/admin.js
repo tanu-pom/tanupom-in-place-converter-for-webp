@@ -1,5 +1,5 @@
 /**
- * Simply WebP admin tools page script.
+ * Tanupom In-Place Converter for WebP admin tools page script.
  *
  * Drives the inventory scan, batched bulk conversion, and reference
  * replacement through admin-ajax. No build step, ES5 compatible, wrapped in an
@@ -8,7 +8,7 @@
 ( function () {
 	'use strict';
 
-	var cfg = window.SimplyWebP || {};
+	var cfg = window.TanupomIpc || {};
 
 	/**
 	 * POST to admin-ajax as application/x-www-form-urlencoded.
@@ -55,8 +55,8 @@
 	}
 
 	// --- Inventory scan ------------------------------------------------------
-	var scanBtn = document.getElementById( 'simply-webp-scan' );
-	var scanOut = document.getElementById( 'simply-webp-scan-result' );
+	var scanBtn = document.getElementById( 'tanupom-ipc-scan' );
+	var scanOut = document.getElementById( 'tanupom-ipc-scan-result' );
 
 	if ( scanBtn ) {
 		scanBtn.addEventListener( 'click', function () {
@@ -64,7 +64,7 @@
 			scanOut.style.display = 'block';
 			scanOut.textContent = cfg.i18n.scanning;
 			post(
-				'simply_webp_scan',
+				'tanupom_ipc_scan',
 				function ( data ) {
 					scanOut.textContent = JSON.stringify( data, null, 2 );
 					scanBtn.disabled = false;
@@ -78,11 +78,11 @@
 	}
 
 	// --- Bulk conversion (batch loop) ----------------------------------------
-	var convBtn  = document.getElementById( 'simply-webp-convert' );
-	var progress = document.getElementById( 'simply-webp-progress' );
-	var bar      = document.getElementById( 'simply-webp-bar' );
-	var status   = document.getElementById( 'simply-webp-status' );
-	var log      = document.getElementById( 'simply-webp-log' );
+	var convBtn  = document.getElementById( 'tanupom-ipc-convert' );
+	var progress = document.getElementById( 'tanupom-ipc-progress' );
+	var bar      = document.getElementById( 'tanupom-ipc-bar' );
+	var status   = document.getElementById( 'tanupom-ipc-status' );
+	var log      = document.getElementById( 'tanupom-ipc-log' );
 
 	var total = 0;
 
@@ -102,7 +102,7 @@
 	 */
 	function runBatch() {
 		post(
-			'simply_webp_convert_batch',
+			'tanupom_ipc_convert_batch',
 			function ( data ) {
 				var i;
 				for ( i = 0; i < data.results.length; i++ ) {
@@ -140,8 +140,8 @@
 	}
 
 	// --- Reference replacement -----------------------------------------------
-	var repBtn = document.getElementById( 'simply-webp-replace' );
-	var repOut = document.getElementById( 'simply-webp-replace-result' );
+	var repBtn = document.getElementById( 'tanupom-ipc-replace' );
+	var repOut = document.getElementById( 'tanupom-ipc-replace-result' );
 
 	if ( repBtn ) {
 		repBtn.addEventListener( 'click', function () {
@@ -149,7 +149,7 @@
 			repOut.style.display = 'block';
 			repOut.textContent = cfg.i18n.replacing;
 			post(
-				'simply_webp_replace',
+				'tanupom_ipc_replace',
 				function ( data ) {
 					repOut.textContent = cfg.i18n.done + '\n' + JSON.stringify( data, null, 2 );
 					repBtn.disabled = false;

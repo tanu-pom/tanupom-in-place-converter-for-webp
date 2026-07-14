@@ -1,10 +1,10 @@
-=== Simply WebP ===
+=== Tanupom In-Place Converter for WebP ===
 Contributors: tanupom
 Tags: webp, image optimization, performance, convert, imagick
 Requires at least: 5.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 0.2.0
+Stable tag: 0.3.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Convert new uploads and your existing media library to WebP in place, and update
 
 == Description ==
 
-Most WebP plugins keep your original JPEG/PNG files and serve WebP conditionally, which leaves you maintaining two copies of every image. **Simply WebP** takes the opposite, minimal approach: it replaces the originals with WebP **in place**, so your whole library ends up as a single set of WebP files. No rewrite rules, no `.htaccess` tricks, no duplicate storage.
+Most WebP plugins keep your original JPEG/PNG files and serve WebP conditionally, which leaves you maintaining two copies of every image. **Tanupom In-Place Converter for WebP** takes the opposite, minimal approach: it replaces the originals with WebP **in place**, so your whole library ends up as a single set of WebP files. No rewrite rules, no `.htaccess` tricks, no duplicate storage.
 
 It uses your server's Imagick (ImageMagick) build to do the conversion, so heavy lifting stays on the server and the plugin itself stays small.
 
@@ -34,7 +34,7 @@ All three of these are adjustable from the plugin's settings.
 
 = Important: this is in-place and irreversible =
 
-Simply WebP **replaces and deletes** your original images, both at upload time and during bulk conversion. There is no automatic rollback. **Back up your media library (and database) before running the bulk conversion.**
+This plugin **replaces and deletes** your original images, both at upload time and during bulk conversion. There is no automatic rollback. **Back up your media library (and database) before running the bulk conversion.**
 
 = Requirements =
 
@@ -42,9 +42,9 @@ Simply WebP **replaces and deletes** your original images, both at upload time a
 
 == Installation ==
 
-1. Upload the `simply-webp` folder to `/wp-content/plugins/`, or install it from the Plugins screen.
+1. Upload the `tanupom-in-place-converter-for-webp` folder to `/wp-content/plugins/`, or install it from the Plugins screen.
 2. Activate the plugin through the **Plugins** screen in WordPress.
-3. Go to **Tools → Simply WebP**.
+3. Go to **Tools → In-Place WebP**.
 4. **Back up your media library and database first.**
 5. (Optional) Run **Inventory** to see where image URLs are referenced.
 6. Click **Start bulk conversion** and let it run to completion.
@@ -54,7 +54,7 @@ Simply WebP **replaces and deletes** your original images, both at upload time a
 
 = Does it keep my original JPEG/PNG files? =
 
-No. Simply WebP is deliberately "in place": it converts the originals to WebP and deletes the old files. This keeps your library to a single set of files. Make a backup before running it.
+No. This plugin is deliberately "in place": it converts the originals to WebP and deletes the old files. This keeps your library to a single set of files. Make a backup before running it.
 
 = Can I undo the conversion? =
 
@@ -85,15 +85,19 @@ GIF (typically animated) and existing WebP files are always left untouched. Othe
 
 == Screenshots ==
 
-1. The Tools → Simply WebP page: inventory scan, bulk conversion with live progress, and reference replacement.
+1. The Tools → In-Place WebP page: inventory scan, bulk conversion with live progress, and reference replacement.
 2. Conversion settings (WebP quality, lossless PNG, strip metadata).
 
 == Changelog ==
 
+= 0.3.0 =
+* Renamed the plugin to "Tanupom In-Place Converter for WebP". Internal prefixes, option names, and the `tanupom_ipc_replace_post_types` filter were renamed to match.
+* Translations now load automatically; the explicit `load_plugin_textdomain()` call was removed.
+
 = 0.2.0 =
 * Added automatic WebP conversion of new uploads (JPEG, PNG, BMP, HEIC, HEIF) via the `wp_handle_upload` filter, with graceful fallback when the server cannot output WebP.
 * Added a "Reference replacement" settings section: select additional public custom post types whose `post_content` should be scanned during URL replacement.
-* Added the `simply_webp_replace_post_types` filter so developers can override the scanned post types programmatically.
+* Added the `tanupom_ipc_replace_post_types` filter so developers can override the scanned post types programmatically.
 * Added Japanese translation (.po / .mo).
 * Internal cleanup: improved code documentation and consistency.
 

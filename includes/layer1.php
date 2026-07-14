@@ -13,7 +13,7 @@
  * conversion fails, the upload array is returned unchanged and the original
  * file remains in place.
  *
- * @package Simply_WebP
+ * @package Tanupom_In_Place_Converter
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,12 +24,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * MIME types eligible for upload-time auto-conversion.
  *
- * Broader than the bulk path (SIMPLY_WEBP_TARGET_MIMES = JPEG / PNG) because
+ * Broader than the bulk path (TANUPOM_IPC_TARGET_MIMES = JPEG / PNG) because
  * uploads arrive in many formats. HEIC / HEIF are only actually converted on
  * servers whose Imagick build has the HEIC delegate; on unsupported servers
  * the conversion core returns false and the original is left untouched.
  */
-const SIMPLY_WEBP_UPLOAD_MIMES = array(
+const TANUPOM_IPC_UPLOAD_MIMES = array(
 	'image/jpeg',
 	'image/png',
 	'image/bmp',
@@ -54,7 +54,7 @@ const SIMPLY_WEBP_UPLOAD_MIMES = array(
  * @param array $upload `array( 'file' => absolute path, 'url' => URL, 'type' => MIME )`.
  * @return array The replaced upload array, or the original unchanged.
  */
-function simply_webp_convert_upload( $upload ) {
+function tanupom_ipc_convert_upload( $upload ) {
 
 	// Defensive: bail if the upload array does not have the expected shape.
 	if ( ! is_array( $upload ) || empty( $upload['file'] ) || empty( $upload['type'] ) ) {
@@ -62,12 +62,12 @@ function simply_webp_convert_upload( $upload ) {
 	}
 
 	// Pass through unsupported MIME types.
-	if ( ! in_array( $upload['type'], SIMPLY_WEBP_UPLOAD_MIMES, true ) ) {
+	if ( ! in_array( $upload['type'], TANUPOM_IPC_UPLOAD_MIMES, true ) ) {
 		return $upload;
 	}
 
 	// Fall back to the original when the server cannot produce WebP.
-	if ( ! simply_webp_server_supported() ) {
+	if ( ! tanupom_ipc_server_supported() ) {
 		return $upload;
 	}
 
@@ -85,7 +85,7 @@ function simply_webp_convert_upload( $upload ) {
 	// Delegate the actual encoding (orientation, transparency, quality, EXIF strip)
 	// to the conversion core. On failure the core cleans up the partial output and
 	// returns false; we then pass through the original.
-	if ( ! simply_webp_convert_file( $src, $dest, $upload['type'] ) ) {
+	if ( ! tanupom_ipc_convert_file( $src, $dest, $upload['type'] ) ) {
 		return $upload;
 	}
 
@@ -100,4 +100,4 @@ function simply_webp_convert_upload( $upload ) {
 
 	return $upload;
 }
-add_filter( 'wp_handle_upload', 'simply_webp_convert_upload' );
+add_filter( 'wp_handle_upload', 'tanupom_ipc_convert_upload' );
