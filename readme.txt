@@ -85,7 +85,7 @@ GIF (typically animated) and existing WebP files are always left untouched. Othe
 
 == Screenshots ==
 
-1. The Tools → In-Place WebP page: inventory scan, bulk conversion with live progress, and reference replacement.
+1. The In-Place WebP tools page (under the Tools menu): inventory scan, bulk conversion with live progress, and reference replacement.
 2. Conversion settings (WebP quality, lossless PNG, strip metadata).
 
 == Changelog ==
